@@ -6,14 +6,24 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="mybatis-step-06" />
         <module name="mybatis-step-05" />
-        <module name="mybatis-step-temp" />
+        <module name="mybatis-step-08" />
+        <module name="mybatis-step-07" />
         <module name="mybatis-step-02" />
         <module name="mybatis-step-01" />
         <module name="mybatis-step-04" />
         <module name="mybatis-step-03" />
         <module name="mybatis-step-00" />
+        <module name="mybatis-step-11" />
+        <module name="mybatis-step-10" />
+        <module name="mybatis-step-09" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="mybatis-step-08 (1)" target="17" />
+      <module name="mybatis-step-08 (2)" target="17" />
+      <module name="mybatis-step-temp" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>

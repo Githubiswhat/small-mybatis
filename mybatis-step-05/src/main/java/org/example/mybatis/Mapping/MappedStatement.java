@@ -6,32 +6,21 @@ import java.util.Map;
 
 public class MappedStatement {
 
+    private String id;
     private Configuration configuration;
 
     private SqlCommandType sqlCommandType;
-
-    private String id;
-
-    private String sql;
-
-    private String resultType;
-
-    private String parameterType;
-
-    private Map<Integer, String> parameter;
+    private BoundSql boundSql;
 
     public static class Builder {
 
         private MappedStatement mappedStatement = new MappedStatement();
 
-        public Builder(Configuration configuration, SqlCommandType sqlCommandType, String id, String sql, String resultType, String parameterType, Map<Integer, String> parameter) {
+        public Builder(Configuration configuration, String id, SqlCommandType sqlCommandType, BoundSql boundSql) {
             mappedStatement.configuration = configuration;
             mappedStatement.sqlCommandType = sqlCommandType;
+            mappedStatement.boundSql = boundSql;
             mappedStatement.id = id;
-            mappedStatement.sql = sql;
-            mappedStatement.resultType = resultType;
-            mappedStatement.parameterType = parameterType;
-            mappedStatement.parameter = parameter;
         }
 
         public MappedStatement build() {
@@ -66,35 +55,11 @@ public class MappedStatement {
         this.id = id;
     }
 
-    public String getSql() {
-        return sql;
+    public BoundSql getBoundSql() {
+        return boundSql;
     }
 
-    public void setSql(String sql) {
-        this.sql = sql;
-    }
-
-    public String getResultType() {
-        return resultType;
-    }
-
-    public void setResultType(String resultType) {
-        this.resultType = resultType;
-    }
-
-    public String getParameterType() {
-        return parameterType;
-    }
-
-    public void setParameterType(String parameterType) {
-        this.parameterType = parameterType;
-    }
-
-    public Map<Integer, String> getParameter() {
-        return parameter;
-    }
-
-    public void setParameter(Map<Integer, String> parameter) {
-        this.parameter = parameter;
+    public void setBoundSql(BoundSql boundSql) {
+        this.boundSql = boundSql;
     }
 }
