@@ -1,14 +1,28 @@
 package org.example.mybatis.session;
 
 import org.example.mybatis.binding.MapperRegistry;
+import org.example.mybatis.datasource.druid.DruidDataSourceFactory;
 import org.example.mybatis.datasource.pooled.PooledDataSourceFactory;
-import org.example.mybatis.datasource.unpool.UnpooledDataSourceFactory;
+import org.example.mybatis.datasource.unpooled.UnpooledDataSourceFactory;
+import org.example.mybatis.executor.Executor;
+import org.example.mybatis.executor.SimpleExecutor;
+import org.example.mybatis.executor.parameter.ParameterHandler;
+import org.example.mybatis.executor.resultset.DefaultResultSetHandler;
+import org.example.mybatis.executor.resultset.ResultSetHandler;
+import org.example.mybatis.executor.statement.PreparedStatementHandler;
+import org.example.mybatis.executor.statement.StatementHandler;
+import org.example.mybatis.mapping.BoundSql;
 import org.example.mybatis.mapping.Environment;
 import org.example.mybatis.mapping.MappedStatement;
+import org.example.mybatis.reflection.MetaObject;
+import org.example.mybatis.reflection.factory.DefaultObjectFactory;
+import org.example.mybatis.reflection.factory.ObjectFactory;
 import org.example.mybatis.reflection.wrapper.DefaultObjectWrapperFactory;
 import org.example.mybatis.reflection.wrapper.ObjectWrapperFactory;
+import org.example.mybatis.scripting.LanguageDriver;
 import org.example.mybatis.scripting.LanguageDriverRegistry;
 import org.example.mybatis.scripting.xmltags.XMLLanguageDriver;
+import org.example.mybatis.transaction.Transaction;
 import org.example.mybatis.transaction.jdbc.JdbcTransactionFactory;
 import org.example.mybatis.type.TypeAliasRegistry;
 import org.example.mybatis.type.TypeHandlerRegistry;
@@ -78,6 +92,63 @@ public class Configuration {
         return mappedStatements.get(id);
     }
 
+    public boolean isResourceLoaded(String resource) {
+        return loadedResources.contains(resource);
+    }
+
+    public void addLoadedResource(String resource) {
+        loadedResources.add(resource);
+    }
+
+    public ParameterHandler newParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
+        // 创建参数处理器
+        ParameterHandler parameterHandler = mappedStatement.getLang().createParameterHandler(mappedStatement, parameterObject, boundSql);
+        // 插件的一些参数，也是在这里处理，暂时不添加这部分内容 interceptorChain.pluginAll(parameterHandler);
+        return parameterHandler;
+    }
+
+    public LanguageDriver getDefaultScriptingLanguageInstance() {
+        return languageRegistry.getDefaultDriver();
+    }
+
+    public ObjectFactory getObjectFactory() {
+        return objectFactory;
+    }
+    /**
+     * 创建结果集处理器
+     */
+    public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+        return new DefaultResultSetHandler(executor, mappedStatement, resultHandler, rowBounds, boundSql);
+    }
+
+    /**
+     * 生产执行器
+     */
+    public Executor newExecutor(Transaction transaction) {
+        return new SimpleExecutor(this, transaction);
+    }
+
+    /**
+     * 创建语句处理器
+     */
+    public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+        return new PreparedStatementHandler(executor, mappedStatement, parameter, rowBounds, resultHandler, boundSql);
+    }
+
+    // 创建元对象
+    public MetaObject newMetaObject(Object object) {
+        return MetaObject.forObject(object, objectFactory, objectWrapperFactory);
+    }
+
+    // 类型处理器注册机
+    public TypeHandlerRegistry getTypeHandlerRegistry() {
+        return typeHandlerRegistry;
+    }
+
+
+    // ------------------ Getter   and  Setter ------------------//
+
+
     public Environment getEnvironment() {
         return environment;
     }
@@ -104,14 +175,6 @@ public class Configuration {
 
     public LanguageDriverRegistry getLanguageRegistry() {
         return languageRegistry;
-    }
-
-    public TypeHandlerRegistry getTypeHandlerRegistry() {
-        return typeHandlerRegistry;
-    }
-
-    public ObjectFactory getObjectFactory() {
-        return objectFactory;
     }
 
     public void setObjectFactory(ObjectFactory objectFactory) {

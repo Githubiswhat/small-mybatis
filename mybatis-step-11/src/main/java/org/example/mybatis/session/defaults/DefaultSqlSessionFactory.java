@@ -1,9 +1,11 @@
 package org.example.mybatis.session.defaults;
 
+import org.example.mybatis.executor.Executor;
 import org.example.mybatis.mapping.Environment;
 import org.example.mybatis.session.Configuration;
 import org.example.mybatis.session.SqlSession;
 import org.example.mybatis.session.SqlSessionFactory;
+import org.example.mybatis.session.TransactionIsolationLevel;
 import org.example.mybatis.transaction.Transaction;
 import org.example.mybatis.transaction.TransactionFactory;
 

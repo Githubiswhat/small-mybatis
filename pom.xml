@@ -23,6 +23,10 @@
         <module>mybatis-step-09</module>
         <module>mybatis-step-10</module>
         <module>mybatis-step-11</module>
+        <module>mybatis-step-12</module>
+        <module>mybatis-step-13</module>
+        <module>mybatis-step-14</module>
+        <module>mybatis-step-15</module>
     </modules>
 
     <properties>

@@ -4,8 +4,10 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.example.mybatis.builder.BaseBuilder;
 import org.example.mybatis.datasource.DataSourceFactory;
 import org.example.mybatis.io.Resources;
+import org.example.mybatis.mapping.Environment;
 import org.example.mybatis.session.Configuration;
 import org.example.mybatis.transaction.TransactionFactory;
 import org.xml.sax.InputSource;
@@ -16,7 +18,7 @@ import java.io.Reader;
 import java.util.List;
 import java.util.Properties;
 
-public class XMLConfigBuilder {
+public class XMLConfigBuilder extends BaseBuilder {
 
     private Element root;
 
